@@ -17,6 +17,7 @@
 @prefix ro-crate: <https://github.com/crs4/rocrate-validator/profiles/ro-crate/> .
 @prefix isa-ro-crate: <https://github.com/crs4/rocrate-validator/profiles/isa-ro-crate/> .
 @prefix arc-wr-workflow: <https://github.com/crs4/rocrate-validator/profiles/arc-wr-workflow/> .
+@prefix workflow-ro-crate: <https://github.com/crs4/rocrate-validator/profiles/workflow-ro-crate/> .
 @prefix bioschemas: <https://bioschemas.org/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix schema: <http://schema.org/> .
@@ -24,26 +25,29 @@
 @prefix validator: <https://github.com/crs4/rocrate-validator/> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-# arc-wr-workflow:MainWorkflowMustBeLabProtocol a sh:NodeShape ;
-#     sh:name "Main Workflow MUST be a LabProtocol" ;
-#     sh:description "The main workflow of the Workflow RO-Crate must be of type LabProtocol" ;
-#     sh:targetClass workflow-ro-crate:MainWorkflow ;
-#     sh:class bioschemas:LabProtocol ;
-#     sh:message "Main Workflow MUST be a LabProtocol" ;
-#     sh:severity sh:Violation ;
-# .
-
-arc-wr-workflow:MainEntityMustBeARCWorkflow a sh:NodeShape ;
-    sh:name "Main entity must be ARCWorkflow" ;
-    sh:description "The main entity must be of type ARCWorkflow" ;
-    sh:targetClass workflow-ro-crate:MainWorkflow ;
+arc-wr-workflow:RootDataEntityMustBeARCWorkflow a sh:NodeShape ;
+    sh:name "Root Data Entity must be ARC Workflow" ;
+    sh:description "The root data entity must follow the ARC workflow profile" ;
+    sh:targetClass ro-crate:RootDataEntity ;
     sh:property [
         a sh:PropertyShape ;
         sh:path schema:additionalType ;
         sh:minCount 1 ;
-        sh:hasValue "Workflow Protocol" ;
-        sh:description "Check if the main entity is specified as a workflow protocol through additionalType" ;
-        sh:message "The main entity must have additionalType of `Workflow Protocol`" ;
+        sh:hasValue "ARCWorkflow";
+        sh:description "Check if the root data entity is specified as an ARC Workflow through additionalType" ;
+        sh:message "The root data entity must have additionalType of `ARCWorkflow`" ;
+        sh:severity sh:Violation ;
+    ] ;
+    sh:property [
+        a sh:PropertyShape ;
+        sh:path schema:identifier ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:not [
+            sh:hasValue ""
+        ] ;
+        sh:description "Check if the root data entity (ARC Workflow) has an identifier" ;
+        sh:message "The root data entity must have a non-empty identifier" ;
         sh:severity sh:Violation ;
     ] ;
 .
